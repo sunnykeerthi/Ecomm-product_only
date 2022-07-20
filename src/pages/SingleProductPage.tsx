@@ -82,7 +82,7 @@ const SingleProductPage = () => {
     setIsLoading(true);
     try {
       const response = await fetch(
-        `https://liveapi-sandbox.yext.com/v2/accounts/3147081/entities/${id}?api_key=8a7b1b2d11c99bd6cd676dc3b9ff4a65&v=20220101`
+        `https://liveapi-sandbox.yext.com/v2/accounts/3147081/entities/${id}?api_key=${process.env.REACT_APP_KEY}&v=20220101`
       );
       const responseJson: RootObject = await response.json();
       setData(await responseJson.response);
