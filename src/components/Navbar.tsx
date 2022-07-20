@@ -14,6 +14,7 @@ import {
 import classNames from "classnames";
 import { Root } from "../Providers/ProductsSchema";
 import { ProductCard } from "../components/ProductCard";
+import CartIcon from "./CartComponents/CartIcon";
 export function Navbar() {
   const visualAutocompleteConfig: VisualAutocompleteConfig = {
     entityPreviewSearcher: provideAnswersHeadless({
@@ -81,6 +82,7 @@ export function Navbar() {
           }}
         />
       </div>
+      <CartIcon />
     </NavContainer>
   );
 }

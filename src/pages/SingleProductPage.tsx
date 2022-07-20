@@ -5,6 +5,7 @@ import { Link } from "react-router-dom";
 import { FaCheck } from "react-icons/fa";
 import Loading from "../components/Loading";
 import Cart from "../components/Cart";
+import { useCartContext } from "../context/CartContext";
 
 interface ParamTypes {
   id: string;
@@ -72,6 +73,8 @@ interface RootObject {
 }
 
 const SingleProductPage = () => {
+  const { addToCart } = useCartContext();
+  const [amount, setAmount] = useState(1);
   const { id } = useParams();
   const [data, setData] = useState<RootObject["response"] | null>();
   const [isLoading, setIsLoading] = useState(false);
@@ -89,7 +92,22 @@ const SingleProductPage = () => {
       setIsLoading(false);
     }
   };
-
+  const increase = () => {
+    setAmount((oldAmount) => {
+      var amnt = oldAmount + 1;
+      if (amnt >= 20) setAmount(20);
+      else setAmount(amnt);
+      return amnt;
+    });
+  };
+  const decrease = () => {
+    setAmount((oldAmount) => {
+      var amnt = oldAmount - 1;
+      if (amnt < 1) setAmount(1);
+      else setAmount(amnt);
+      return amnt;
+    });
+  };
   useEffect(() => {
     fetchProduct();
   }, [id]);
@@ -153,11 +171,17 @@ const SingleProductPage = () => {
                     </div>
                   </div>
                   <div className="btn-container">
-                    <Cart />
+                    <Cart
+                      increase={increase}
+                      decrease={decrease}
+                      amount={amount}
+                    />
                     <Link
                       to="/cart"
                       className="btn"
-                      onClick={(e) => e.preventDefault()}
+                      onClick={() => {
+                        addToCart(id, data.c_color[0], amount, data);
+                      }}
                     >
                       add to cart
                     </Link>
