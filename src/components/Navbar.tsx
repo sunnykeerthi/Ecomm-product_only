@@ -70,7 +70,7 @@ export function Navbar() {
         <ul className="nav-links">
           <li>
             <Link className="text-blue-500 hover:underline p-2" to="/">
-              Products
+              All Products
             </Link>
           </li>
         </ul>
