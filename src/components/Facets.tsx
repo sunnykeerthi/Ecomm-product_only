@@ -8,26 +8,24 @@ import {
   useComposedCssClasses,
 } from "../hooks/useComposedCssClasses";
 import Facet, { FacetConfig, FacetCssClasses } from "./Facet";
-import { Divider } from "./Divider";
+import { Divider } from "./StaticFilters";
 
-//prettier-ignore
 interface FacetsProps {
-  searchOnChange?: boolean,
-  searchable?: boolean,
-  collapsible?: boolean,
-  defaultExpanded?: boolean,
-  showFacet?: boolean,
-  facetConfigs?: Record<string, FacetConfig>,
-  customCssClasses?: FacetsCssClasses,
-  cssCompositionMethod?: CompositionMethod
+  searchOnChange?: boolean;
+  searchable?: boolean;
+  showFacet?: boolean;
+  collapsible?: boolean;
+  defaultExpanded?: boolean;
+  facetConfigs?: Record<string, FacetConfig>;
+  customCssClasses?: FacetsCssClasses;
+  cssCompositionMethod?: CompositionMethod;
 }
 
-//prettier-ignore
 interface FacetsCssClasses extends FacetCssClasses {
-  container?: string,
-  divider?: string,
-  buttonsContainer?: string,
-  button?: string
+  container?: string;
+  divider?: string;
+  buttonsContainer?: string;
+  button?: string;
 }
 
 const builtInCssClasses: FacetsCssClasses = {
@@ -36,17 +34,19 @@ const builtInCssClasses: FacetsCssClasses = {
   container: "md:w-40",
   buttonsContainer: "flex justify-between mt-5",
   button: "border border-gray-300 px-2.5 py-1 rounded-md",
+  divider: "w-full h-px bg-gray-200 my-4",
 };
 
 export default function Facets(props: FacetsProps): JSX.Element {
+  const SHOW_FACET_DEFAULT = false;
   const {
     searchOnChange,
     searchable,
     collapsible,
     defaultExpanded,
-    showFacet,
     facetConfigs = {},
     customCssClasses,
+    showFacet = false,
     cssCompositionMethod,
   } = props;
   const cssClasses = useComposedCssClasses(
@@ -80,13 +80,12 @@ export default function Facets(props: FacetsProps): JSX.Element {
     .filter((facet) => facet.options?.length > 0)
     .map((facet, index, facetArray) => {
       const isLastFacet = index === facetArray.length - 1;
-
       const overrideConfig = facetConfigs?.[facet.fieldId] ?? {};
       const config = {
         searchable,
+        showFacet,
         collapsible,
         defaultExpanded,
-        showFacet,
         ...overrideConfig,
       };
 
@@ -95,11 +94,15 @@ export default function Facets(props: FacetsProps): JSX.Element {
           <Facet
             facet={facet}
             {...config}
-            customCssclasses={customCssClasses}
-            cssCompositionMethod={cssCompositionMethod}
+            customCssclasses={cssClasses}
             onToggle={handleFacetOptionChange}
           />
-          {!isLastFacet && <Divider />}
+          {!isLastFacet && config.showFacet && (
+            <Divider
+              customCssClasses={{ divider: cssClasses.divider }}
+              cssCompositionMethod="replace"
+            />
+          )}
         </div>
       );
     });
@@ -113,9 +116,9 @@ export default function Facets(props: FacetsProps): JSX.Element {
             Apply
           </button>
         )}
-        {/* <button onClick={handleResetFacets} className={cssClasses.button}>
+        <button onClick={handleResetFacets} className={cssClasses.button}>
           Reset all
-        </button> */}
+        </button>
       </div>
     </div>
   );

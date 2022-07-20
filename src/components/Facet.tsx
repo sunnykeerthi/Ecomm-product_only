@@ -14,7 +14,6 @@ import renderCheckboxOption, {
   CheckboxOptionCssClasses,
 } from "../utils/renderCheckboxOption";
 import renderColorfacets from "../utils/renderColorfacets";
-import renderImageOption from "../utils/renderColorfacets";
 
 export type onFacetChangeFn = (
   fieldId: string,
@@ -79,6 +78,7 @@ export default function Facet(props: FacetProps): JSX.Element {
     facetCss,
     isMobile,
   } = props;
+
   const cssClasses = useComposedCssClasses(
     builtInCssClasses,
     facetCss ?? customCssclasses,
@@ -123,7 +123,14 @@ export default function Facet(props: FacetProps): JSX.Element {
                 onChange={(e) => setFilterValue(e.target.value)}
               />
             )}
-            <div className={cssClasses.optionsContainer}>
+
+            <div
+              className={`${
+                facetCss
+                  ? facetCss.optionsContainer
+                  : cssClasses.optionsContainer
+              }`}
+            >
               {facetOptions.map((option) => {
                 if (type === "checkbox") {
                   return renderCheckboxOption({
@@ -140,7 +147,7 @@ export default function Facet(props: FacetProps): JSX.Element {
                   if (facetImages) {
                     color = facetImages[option.displayName];
                   }
- 
+
                   return renderColorfacets({
                     option: {
                       id: option.displayName,

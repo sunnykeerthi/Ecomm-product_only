@@ -1,20 +1,16 @@
-import { Result, useAnswersState } from "@yext/answers-headless-react";
+import { useAnswersState } from "@yext/answers-headless-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useProductsContext } from "../../context/ProductsContext";
-import Loading from "../Loading";
 import { Divider } from "../Divider";
 import Facets from "../Facets";
-import {
-  AppliedFilters,
-  NumericalFacets,
-} from "@yext/answers-react-components";
+import FilterDisplayManager from "../FilterDisplayManager";
 interface ClassFacetsProps {
   isMobile?: boolean;
 }
 const FacetsSection = ({ isMobile }: ClassFacetsProps): JSX.Element => {
   const [loading, setLoading] = useState(false);
-  const { setPrice, setMaxPrice, setMinPrice, minPrice, maxPrice } =
+  const { setPrice, setMaxPrice, price, setMinPrice, minPrice, maxPrice } =
     useProductsContext();
   const results = useAnswersState((state) => state.vertical.results);
   const isLoading = useAnswersState((state) => state.searchStatus.isLoading);
@@ -46,33 +42,62 @@ const FacetsSection = ({ isMobile }: ClassFacetsProps): JSX.Element => {
 
   return (
     <div className="content">
-      <NumericalFacets />
-      <Divider></Divider>
-      <Facets
-        cssCompositionMethod="assign"
-        searchOnChange={true}
-        defaultExpanded={true}
-        facetConfigs={{
-          c_department: {
-            label: "Department",
-            showFacet: true,
-          },
-          c_cCategory: {
-            label: "Category",
-            collapsible: true,
-            defaultExpanded: true,
-            showFacet: true,
-          },
-          c_color: {
-            label: "Colors",
-            collapsible: true,
-            defaultExpanded: true,
-            showFacet: true,
-            facetCss: { optionsContainer: "colors-container" },
-            type: "color",
-          },
-        }}
-      />
+      <FilterDisplayManager>
+        <div
+          className="text-gray-900 text-sm font-medium text-left"
+          style={{ display: "flex" }}
+        >
+          Price
+          <h5
+            style={{
+              fontWeight: "bold",
+              marginLeft: "auto",
+              order: "2",
+              marginRight: "18%",
+            }}
+          >
+            {parseInt(price) === parseInt(minPrice) || parseInt(price) === 0
+              ? ""
+              : "<$" + parseInt(price) || parseInt(minPrice)}
+          </h5>
+        </div>
+        {parseInt(minPrice)}
+        <input
+          type="range"
+          min={minPrice}
+          max={maxPrice}
+          value={parseInt(price) || parseInt(minPrice)}
+          onChange={(e: any) => updatePriceRange(e)}
+        />
+        {parseInt(maxPrice)}
+        <br />
+        <Divider />
+        <Facets
+          cssCompositionMethod="assign"
+          searchOnChange={true}
+          defaultExpanded={true}
+          facetConfigs={{
+            c_department: {
+              label: "Department",
+              showFacet: true,
+            },
+            c_cCategory: {
+              label: "Category",
+              collapsible: true,
+              defaultExpanded: true,
+              showFacet: true,
+            },
+            c_color: {
+              label: "Colors",
+              collapsible: true,
+              defaultExpanded: true,
+              showFacet: true,
+              facetCss: { optionsContainer: "colors-container" },
+              type: "color",
+            },
+          }}
+        />
+      </FilterDisplayManager>
     </div>
   );
 };
