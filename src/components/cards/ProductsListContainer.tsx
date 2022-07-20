@@ -10,6 +10,7 @@ import {
   useAnswersActions,
   useAnswersState,
 } from "@yext/answers-headless-react";
+import { AppliedFilters } from "@yext/answers-react-components";
 
 const ProductsListContainer = (props: any) => {
   const { isGrid, sortType, price } = useProductsContext();
@@ -49,6 +50,7 @@ const ProductsListContainer = (props: any) => {
     <Loading />
   ) : (
     <>
+      <AppliedFilters />
       {isGrid ? (
         <WrapperGrid>
           <div className="products-container">
