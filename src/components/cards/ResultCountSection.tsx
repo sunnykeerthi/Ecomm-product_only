@@ -1,10 +1,4 @@
-import {
-  Direction,
-  SortBy,
-  SortType,
-  useSearchActions,
-  useSearchState,
-} from "@yext/search-headless-react";
+import { Direction, SortBy, SortType } from "@yext/search-headless-react";
 import { useState } from "react";
 import { BsFillGridFill, BsList } from "react-icons/bs";
 import styled from "styled-components";
@@ -16,8 +10,6 @@ const ResultCountSection = (props: any) => {
   const [sortByLabel, setSortByLabel] = useState<string>("");
   const { isProducts } = props;
   const { sortOptions } = props;
-  const answersActions = useSearchActions();
-  const sortBys = useSearchState((state) => state.vertical.sortBys);
   const sortByOptions: { label: string; sortBy: SortBy }[] = [
     {
       label: "Price: High to Low",
