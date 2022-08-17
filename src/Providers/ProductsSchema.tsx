@@ -1,4 +1,4 @@
-import { CardProps } from "@yext/answers-react-components";
+import { CardProps } from "@yext/search-ui-react";
 
 //prettier-ignore
 export interface ProductCardConfig {

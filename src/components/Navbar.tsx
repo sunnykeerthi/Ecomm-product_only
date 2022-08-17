@@ -2,27 +2,24 @@ import {
   DropdownItem,
   SearchBar,
   VisualAutocompleteConfig,
-} from "@yext/answers-react-components";
+} from "@yext/search-ui-react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 import { answersSandboxEndpoints, config } from "../config";
 import logo from "../icons/logo.png";
-import {
-  provideAnswersHeadless,
-  useAnswersActions,
-} from "@yext/answers-headless-react";
+import { provideHeadless, useSearchActions } from "@yext/search-headless-react";
 import classNames from "classnames";
 import { Root } from "../Providers/ProductsSchema";
 import { ProductCard } from "../components/ProductCard";
 import CartIcon from "./CartComponents/CartIcon";
 export function Navbar() {
   const visualAutocompleteConfig: VisualAutocompleteConfig = {
-    entityPreviewSearcher: provideAnswersHeadless({
+    entityPreviewSearcher: provideHeadless({
       ...config,
       endpoints: answersSandboxEndpoints,
       headlessId: "visual-autocomplete",
     }),
-    restrictVerticals: ["products"],
+    includedVerticals: ["products"],
     renderEntityPreviews: (isLoading, verticalKeyToResults) => {
       if (!verticalKeyToResults.products) {
         return null;
@@ -76,9 +73,11 @@ export function Navbar() {
         </ul>
         <SearchBar
           visualAutocompleteConfig={visualAutocompleteConfig}
+          hideRecentSearches={true}
           customCssClasses={{
-            optionContainer: "hidden",
-            container: "searchbar-width",
+            searchBarContainer: "overrideContainer",
+            recentSearchesOption: "hidden",
+            icon: "none",
           }}
         />
       </div>

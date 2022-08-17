@@ -1,8 +1,8 @@
 import {
-  useAnswersActions,
-  useAnswersState,
-} from "@yext/answers-headless-react";
-import { NumericalFacets } from "@yext/answers-react-components";
+  useSearchActions,
+  useSearchState,
+} from "@yext/search-headless-react";
+import { NumericalFacets } from "@yext/search-ui-react";
 import { useEffect } from "react";
 import styled from "styled-components";
 import { useProductsContext } from "../../context/ProductsContext";

@@ -1,5 +1,5 @@
-import { useAnswersActions } from "@yext/answers-headless-react";
-import { LocationBias, Pagination } from "@yext/answers-react-components";
+import { useSearchActions } from "@yext/search-headless-react";
+import { LocationBias, Pagination } from "@yext/search-ui-react";
 
 import { useLayoutEffect } from "react";
 import usePageSetupEffect from "../hooks/usePageSetupEffect";
@@ -16,7 +16,7 @@ const customSearchBarCss = {
 };
 
 export function ProductsPage() {
-  const answersActions = useAnswersActions();
+  const answersActions = useSearchActions();
   useLayoutEffect(() => {
     answersActions.setVertical("products");
   });

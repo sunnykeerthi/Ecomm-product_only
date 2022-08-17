@@ -1,8 +1,8 @@
 import {
-  useAnswersState,
-  useAnswersActions,
+  useSearchState,
+  useSearchActions,
   DisplayableFacetOption,
-} from "@yext/answers-headless-react";
+} from "@yext/search-headless-react";
 import {
   CompositionMethod,
   useComposedCssClasses,
@@ -54,9 +54,9 @@ export default function Facets(props: FacetsProps): JSX.Element {
     customCssClasses,
     cssCompositionMethod
   );
-  const facets = useAnswersState((state) => state.filters?.facets) || [];
+  const facets = useSearchState((state) => state.filters?.facets) || [];
 
-  const answersActions = useAnswersActions();
+  const answersActions = useSearchActions();
   const executeSearch = () => answersActions.executeVerticalQuery();
 
   const handleResetFacets = () => {

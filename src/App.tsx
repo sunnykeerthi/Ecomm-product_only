@@ -1,8 +1,8 @@
-import { AnswersHeadlessProvider } from "@yext/answers-headless-react";
+import { AnswersHeadlessProvider } from "@yext/search-headless-react";
 import { Navbar } from "./components/Navbar";
 import { ProductsPage } from "./pages/ProductsPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
-import { AnalyticsProvider } from "@yext/answers-react-components";
+import { AnalyticsProvider } from "@yext/search-ui-react";
 import { answersSandboxEndpoints, config } from "./config";
 import SingleProductPage from "./pages/SingleProductPage";
 import CartPage from "./pages/CartPage";

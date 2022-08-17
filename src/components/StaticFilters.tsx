@@ -1,9 +1,9 @@
 import {
-  useAnswersActions,
-  useAnswersState,
+  useSearchActions,
+  useSearchState,
   Filter,
   Matcher,
-} from "@yext/answers-headless-react";
+} from "@yext/search-headless-react";
 import {
   CompositionMethod,
   useComposedCssClasses,
@@ -42,7 +42,7 @@ const builtInCssClasses: StaticFiltersCssClasses = {
 };
 
 export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
-  const answersActions = useAnswersActions();
+  const answersActions = useSearchActions();
   const { filterConfig, customCssClasses, cssCompositionMethod } = props;
   const cssClasses = useComposedCssClasses(
     builtInCssClasses,
@@ -50,7 +50,7 @@ export default function StaticFilters(props: StaticFiltersProps): JSX.Element {
     cssCompositionMethod
   );
 
-  const selectableFilters = useAnswersState((state) => state.filters.static);
+  const selectableFilters = useSearchState((state) => state.filters.static);
   const getOptionSelectStatus = (option: FilterOption): boolean => {
     const foundFilter = selectableFilters?.find((storedSelectableFilter) => {
       const { selected, ...storedFilter } = storedSelectableFilter;

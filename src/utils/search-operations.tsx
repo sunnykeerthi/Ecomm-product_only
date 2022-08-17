@@ -1,4 +1,4 @@
-import { AnswersActions, SearchIntent } from "@yext/answers-headless-react";
+import { AnswersActions, SearchIntent } from "@yext/search-headless-react";
 
 const defaultGeolocationOptions: PositionOptions = {
   enableHighAccuracy: false,

@@ -1,4 +1,4 @@
-import { useAnswersState } from "@yext/answers-headless-react";
+import { useSearchState } from "@yext/search-headless-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useProductsContext } from "../../context/ProductsContext";
@@ -12,8 +12,8 @@ const FacetsSection = ({ isMobile }: ClassFacetsProps): JSX.Element => {
   const [loading, setLoading] = useState(false);
   const { setPrice, setMaxPrice, price, setMinPrice, minPrice, maxPrice } =
     useProductsContext();
-  const results = useAnswersState((state) => state.vertical.results);
-  const isLoading = useAnswersState((state) => state.searchStatus.isLoading);
+  const results = useSearchState((state) => state.vertical.results);
+  const isLoading = useSearchState((state) => state.searchStatus.isLoading);
 
   const [value, setValue] = useState(1);
   const updatePriceRange = (e: any) => {

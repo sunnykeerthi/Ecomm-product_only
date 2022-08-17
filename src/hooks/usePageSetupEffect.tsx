@@ -1,5 +1,5 @@
 import { useLayoutEffect } from "react";
-import { useAnswersActions, SearchIntent } from "@yext/answers-headless-react";
+import { useSearchActions, SearchIntent } from "@yext/search-headless-react";
 import {
   executeSearch,
   getSearchIntents,
@@ -11,7 +11,7 @@ import {
  * @param verticalKey - The verticalKey associated with the page, or undefined for universal pages
  */
 export default function usePageSetupEffect(verticalKey?: string) {
-  const answersActions = useAnswersActions();
+  const answersActions = useSearchActions();
   useLayoutEffect(() => {
     const stateToClear = {
       filters: {},

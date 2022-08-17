@@ -1,8 +1,8 @@
 import {
-  useAnswersUtilities,
+  useSearchUtilities,
   DisplayableFacet,
   DisplayableFacetOption,
-} from "@yext/answers-headless-react";
+} from "@yext/search-headless-react";
 import { useState } from "react";
 import useCollapse from "react-collapsed";
 import {
@@ -84,7 +84,7 @@ export default function Facet(props: FacetProps): JSX.Element {
     facetCss ?? customCssclasses,
     cssCompositionMethod
   );
-  const answersUtilities = useAnswersUtilities();
+  const answersUtilities = useSearchUtilities();
   const hasSelectedFacet = !!facet.options.find((o) => o.selected);
   const [filterValue, setFilterValue] = useState("");
   const { getCollapseProps, getToggleProps, isExpanded } = useCollapse({

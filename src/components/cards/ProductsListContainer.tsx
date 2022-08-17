@@ -7,16 +7,16 @@ import Loading from "../Loading";
 import {
   Matcher,
   SelectableFilter,
-  useAnswersActions,
-  useAnswersState,
-} from "@yext/answers-headless-react";
-import { AppliedFilters } from "@yext/answers-react-components";
+  useSearchActions,
+  useSearchState,
+} from "@yext/search-headless-react";
+import { AppliedFilters } from "@yext/search-ui-react";
 
 const ProductsListContainer = (props: any) => {
   const { isGrid, sortType, price } = useProductsContext();
   const [loading, setLoading] = useState(true);
-  const answersActions = useAnswersActions();
-  const isLoading = useAnswersState((state) => state.searchStatus.isLoading);
+  const answersActions = useSearchActions();
+  const isLoading = useSearchState((state) => state.searchStatus.isLoading);
 
   useEffect(() => {
     setTimeout(() => {

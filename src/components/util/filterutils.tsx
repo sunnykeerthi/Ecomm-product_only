@@ -1,4 +1,4 @@
-import { NearFilterValue, CombinedFilter, Filter } from '@yext/answers-headless-react';
+import { NearFilterValue, CombinedFilter, Filter } from '@yext/search-headless-react';
 
 /**
  * Check if the object follows NearFilterValue interface

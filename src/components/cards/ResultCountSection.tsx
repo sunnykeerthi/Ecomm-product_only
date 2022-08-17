@@ -2,22 +2,22 @@ import {
   Direction,
   SortBy,
   SortType,
-  useAnswersActions,
-  useAnswersState,
-} from "@yext/answers-headless-react";
+  useSearchActions,
+  useSearchState,
+} from "@yext/search-headless-react";
 import { useState } from "react";
 import { BsFillGridFill, BsList } from "react-icons/bs";
 import styled from "styled-components";
 import { useProductsContext } from "../../context/ProductsContext";
-import { ResultsCount } from "@yext/answers-react-components";
+import { ResultsCount } from "@yext/search-ui-react";
 
 const ResultCountSection = (props: any) => {
   const { isGrid, setIsGrid, setSortType } = useProductsContext();
   const [sortByLabel, setSortByLabel] = useState<string>("");
   const { isProducts } = props;
   const { sortOptions } = props;
-  const answersActions = useAnswersActions();
-  const sortBys = useAnswersState((state) => state.vertical.sortBys);
+  const answersActions = useSearchActions();
+  const sortBys = useSearchState((state) => state.vertical.sortBys);
   const sortByOptions: { label: string; sortBy: SortBy }[] = [
     {
       label: "Price: High to Low",
