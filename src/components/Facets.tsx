@@ -116,9 +116,9 @@ export default function Facets(props: FacetsProps): JSX.Element {
             Apply
           </button>
         )}
-        <button onClick={handleResetFacets} className={cssClasses.button}>
+        {/* <button onClick={handleResetFacets} className={cssClasses.button}>
           Reset all
-        </button>
+        </button> */}
       </div>
     </div>
   );

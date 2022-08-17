@@ -316,3 +316,70 @@ h4 {
 .SB_parent > div:hover {
   background-color: lightgrey;
 }
+
+.overrideContainer {
+  margin-bottom: 1.5rem;
+  width: 50vw;
+  margin-right: 2em;
+}
+.modalPopup {
+  opacity: 1;
+  background-color: white;
+  box-shadow: 0 5px 10px rgb(0 0 0 / 15%);
+  padding: 1.25rem;
+  border-radius: 8px;
+  position: absolute;
+  width: 75vw;
+  height: fit-content;
+  max-height: 100%;
+  max-width: calc(100vw - 2rem);
+  bottom: calc(100% + 1rem);
+  right: 0;
+  transform-origin: 100% 100%;
+  top: 0;
+  left: 5%;
+  top: 45%;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  margin: auto;
+}
+
+.thumbs {
+  width: 1em;
+  height: 1em;
+  border: 1px solid;
+  color: var(--clr-primary-1);
+  background-color: var(--clr-primary-1);
+  border-radius: 50%;
+  outline: none;
+}
+
+.priceValues {
+  margin-top: -1.5em;
+}
+
+.rangeBoxesContainer {
+  display: flex;
+  gap: 2em;
+  width: 100%;
+  max-width: 95%;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+.rangeBox {
+  width: 40%;
+  display: flex;
+  border: 1px solid #e5e7eb;
+  padding: 0.2em;
+}
+
+.rangeInputbox {
+  width: 100%;
+  outline: none;
+}
+
+.customContainer .space-y-3 {
+  overflow: scroll !important;
+}

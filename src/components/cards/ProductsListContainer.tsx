@@ -1,6 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 import styled from "styled-components";
-import ProductsVerticalResults from "../../VerticalRender/ProductsVerticalResults";
 import { ProductCard } from "./ProductCard";
 import { useProductsContext } from "../../context/ProductsContext";
 import Loading from "../Loading";
@@ -11,46 +10,87 @@ import {
   useSearchState,
 } from "@yext/search-headless-react";
 import { AppliedFilters } from "@yext/search-ui-react";
+import Modal from "./Modal";
+import ProductsVerticalResults from "../../VerticalRender/ProductsVerticalResults";
 
 const ProductsListContainer = (props: any) => {
-  const { isGrid, sortType, price } = useProductsContext();
-  const [loading, setLoading] = useState(true);
+  const {
+    isGrid,
+    sortType,
+    priceValues,
+    prodId,
+    isModalOpen,
+    initLoad,
+    setTempPriceValues,
+    tempPriceValues,
+    setPriceValues,
+  } = useProductsContext();
   const answersActions = useSearchActions();
-  const isLoading = useSearchState((state) => state.searchStatus.isLoading);
-
   useEffect(() => {
-    setTimeout(() => {
-      setLoading(false);
-    }, 1000);
-  }, []);
-  useEffect(() => {
-    sortType && answersActions.setSortBys([sortType]);
-    answersActions.executeVerticalQuery();
+    if (sortType) {
+      sortType && answersActions.setSortBys([sortType]);
+      sortType && answersActions.executeVerticalQuery();
+      answersActions.executeVerticalQuery();
+    }
   }, [sortType]);
-  useEffect(() => {
-    const selectedFilters: SelectableFilter[] = [];
-    const priceFilter = getMaxPrice();
-    priceFilter && selectedFilters.push(priceFilter);
-    answersActions.setStaticFilters(selectedFilters);
-    answersActions.executeVerticalQuery();
-  }, [price]);
 
-  const getMaxPrice = (): SelectableFilter | undefined => {
-    if (price) {
+  useEffect(() => {
+    if (
+      !initLoad &&
+      JSON.stringify(priceValues) !== JSON.stringify(tempPriceValues)
+    ) {
+      const selectedFilters: SelectableFilter[] = [];
+      const priceFilter = getPriceRange();
+      priceFilter && selectedFilters.push(priceFilter);
+      answersActions.setStaticFilters(selectedFilters);
+      answersActions.executeVerticalQuery();
+    } else {
+      setTempPriceValues(priceValues);
+    }
+  }, [priceValues]);
+
+  const getPriceRange = (): SelectableFilter | undefined => {
+    if (priceValues[0] && priceValues[1]) {
       return {
+        displayName: `$${priceValues[0]} - $${priceValues[1]}`,
         selected: true,
         fieldId: "price.value",
-        value: parseInt(price),
-        matcher: Matcher.GreaterThanOrEqualTo,
+        value: {
+          start: {
+            matcher: Matcher.GreaterThanOrEqualTo,
+            value: priceValues[0],
+          },
+          end: { matcher: Matcher.LessThanOrEqualTo, value: priceValues[1] },
+        },
+        matcher: Matcher.Between,
       };
     }
   };
+  const isLoading = useSearchState((state) => state.searchStatus.isLoading);
 
-  return isLoading ? (
+  const state = useSearchState((state) => state);
+  const results = useSearchState((state) => state.vertical.resultsCount) || 0;
+  const filterState: any = state.filters ? state.filters : {};
+
+  useEffect(() => {
+    if (Object.keys(filterState).length >= 1) {
+      if (filterState.hasOwnProperty("static")) {
+        if (
+          (filterState.static && filterState.static.length < 1) ||
+          (filterState.static &&
+            filterState.static.length >= 1 &&
+            !filterState.static[0].selected)
+        ) {
+          setPriceValues(tempPriceValues);
+        }
+      }
+    }
+  }, [filterState]);
+
+  return isLoading && results >= 1 ? (
     <Loading />
   ) : (
     <>
-      <AppliedFilters />
       {isGrid ? (
         <WrapperGrid>
           <div className="products-container">
@@ -60,6 +100,16 @@ const ProductsListContainer = (props: any) => {
             />
           </div>
         </WrapperGrid>
+      ) : prodId ? (
+        <>
+          {isModalOpen && <Modal />}
+          <WrapperList>
+            <ProductsVerticalResults
+              CardComponent={ProductCard}
+              displayAllResults={false}
+            />
+          </WrapperList>
+        </>
       ) : (
         <WrapperList>
           <ProductsVerticalResults

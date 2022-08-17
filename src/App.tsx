@@ -1,4 +1,7 @@
-import { AnswersHeadlessProvider } from "@yext/search-headless-react";
+import {
+  AnswersHeadlessProvider,
+  SearchHeadlessProvider,
+} from "@yext/search-headless-react";
 import { Navbar } from "./components/Navbar";
 import { ProductsPage } from "./pages/ProductsPage";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
@@ -9,7 +12,7 @@ import CartPage from "./pages/CartPage";
 function App() {
   return (
     <div className="p-4">
-      <AnswersHeadlessProvider {...config} endpoints={answersSandboxEndpoints}>
+      <SearchHeadlessProvider {...config} endpoints={answersSandboxEndpoints}>
         <AnalyticsProvider {...config}>
           <BrowserRouter>
             <Navbar />
@@ -20,7 +23,7 @@ function App() {
             </Routes>
           </BrowserRouter>
         </AnalyticsProvider>
-      </AnswersHeadlessProvider>
+      </SearchHeadlessProvider>
     </div>
   );
 }

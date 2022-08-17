@@ -1,104 +1,126 @@
-import { useSearchState } from "@yext/search-headless-react";
+import {
+  Direction,
+  SortBy,
+  SortType,
+  useSearchActions,
+  useSearchState,
+} from "@yext/search-headless-react";
+import { StandardFacets } from "@yext/search-ui-react";
 import { useEffect, useState } from "react";
 import styled from "styled-components";
 import { useProductsContext } from "../../context/ProductsContext";
 import { Divider } from "../Divider";
 import Facets from "../Facets";
 import FilterDisplayManager from "../FilterDisplayManager";
+import { PriceRange } from "./PriceRange";
 interface ClassFacetsProps {
   isMobile?: boolean;
 }
 const FacetsSection = ({ isMobile }: ClassFacetsProps): JSX.Element => {
-  const [loading, setLoading] = useState(false);
-  const { setPrice, setMaxPrice, price, setMinPrice, minPrice, maxPrice } =
-    useProductsContext();
-  const results = useSearchState((state) => state.vertical.results);
-  const isLoading = useSearchState((state) => state.searchStatus.isLoading);
+  const answersActions = useSearchActions();
+  const { priceValues, setPriceValues } = useProductsContext();
 
-  const [value, setValue] = useState(1);
-  const updatePriceRange = (e: any) => {
-    e.preventDefault();
-    setValue(e.target.value);
-    setPrice(e.target.value);
+  const getMaxValue = () => {
+    const sortOpt: { label: string; sortBy: SortBy }[] = [
+      {
+        label: "Price: High to Low",
+        sortBy: {
+          field: "price.value",
+          direction: Direction.Descending,
+          type: SortType.Field,
+        },
+      },
+    ];
+    answersActions.setSortBys([sortOpt[0].sortBy]);
+    answersActions
+      .executeVerticalQuery()
+      .then((res: any) =>
+        setPriceValues((prev: any) => [
+          prev[0],
+          Number(res.verticalResults.results[0].rawData.price.value),
+        ])
+      );
+  };
+
+  const getMinValue = () => {
+    const sortOpt: { label: string; sortBy: SortBy }[] = [
+      {
+        label: "Price: High to Low",
+        sortBy: {
+          field: "price.value",
+          direction: Direction.Ascending,
+          type: SortType.Field,
+        },
+      },
+    ];
+    answersActions.setSortBys([sortOpt[0].sortBy]);
+    answersActions.executeVerticalQuery().then((res: any) => {
+      setPriceValues((prev: any) => [
+        Number(res.verticalResults.results[0].rawData.price.value),
+        prev[1],
+      ]);
+    });
   };
 
   useEffect(() => {
-    if (results && results?.length > 0) {
-      setLoading(true);
-      const resData = results as unknown as Root;
-      const min = Math.min(
-        ...resData?.map((item: any) => item.rawData.price.value)
-      );
-      const max = Math.max(
-        ...resData?.map((item: any) => item.rawData.price.value)
-      );
-      setLoading(false);
-      if (!minPrice) {
-        setMinPrice(min);
-        setMaxPrice(max);
-      }
+    if (priceValues.length <= 0) {
+      getMinValue();
+      getMaxValue();
     }
-  }, [results]);
+  }, []);
 
   return (
-    <div className="content">
-      <FilterDisplayManager>
-        <div
-          className="text-gray-900 text-sm font-medium text-left"
-          style={{ display: "flex" }}
-        >
-          Price
-          <h5
-            style={{
-              fontWeight: "bold",
-              marginLeft: "auto",
-              order: "2",
-              marginRight: "18%",
-            }}
-          >
-            {parseInt(price) === parseInt(minPrice) || parseInt(price) === 0
-              ? ""
-              : "<$" + parseInt(price) || parseInt(minPrice)}
-          </h5>
+    <>
+      {priceValues[0] && priceValues[1] && (
+        <div className="content">
+          <FilterDisplayManager>
+            <StandardFacets
+              collapsible={true}
+              defaultExpanded={true}
+              showMoreLimit={5}
+              showOptionCounts={true}
+              customCssClasses={{ standardFacetsContainer: "customContainer" }}
+              excludedFieldIds={[
+                "c_collarType",
+                "c_collection",
+                "c_color",
+                "c_fabric",
+                "c_fit",
+                "c_pockets",
+                "c_productCategory",
+                "c_size",
+                "c_sleeveLength",
+              ]}
+            />
+            <Facets
+              cssCompositionMethod="assign"
+              searchOnChange={true}
+              defaultExpanded={true}
+              facetConfigs={{
+                c_color: {
+                  label: "Colors",
+                  collapsible: true,
+                  defaultExpanded: true,
+                  showFacet: true,
+                  facetCss: { optionsContainer: "colors-container" },
+                  type: "color",
+                },
+              }}
+            />
+            <PriceRange />
+            <Divider />
+            <StandardFacets
+              customCssClasses={{ standardFacetsContainer: "customContainer" }}
+              collapsible={true}
+              defaultExpanded={true}
+              showMoreLimit={5}
+              showOptionCounts={true}
+              excludedFieldIds={["c_department", "c_cCategory", "c_color"]}
+            />
+          </FilterDisplayManager>
         </div>
-        {parseInt(minPrice)}
-        <input
-          type="range"
-          min={minPrice}
-          max={maxPrice}
-          value={parseInt(price) || parseInt(minPrice)}
-          onChange={(e: any) => updatePriceRange(e)}
-        />
-        {parseInt(maxPrice)}
-        <br />
-        <Divider />
-        <Facets
-          cssCompositionMethod="assign"
-          searchOnChange={true}
-          defaultExpanded={true}
-          facetConfigs={{
-            c_department: {
-              label: "Department",
-              showFacet: true,
-            },
-            c_cCategory: {
-              label: "Category",
-              collapsible: true,
-              defaultExpanded: true,
-              showFacet: true,
-            },
-            c_color: {
-              label: "Colors",
-              collapsible: true,
-              defaultExpanded: true,
-              showFacet: true,
-              facetCss: { optionsContainer: "colors-container" },
-              type: "color",
-            },
-          }}
-        />
-      </FilterDisplayManager>
-    </div>
+      )}
+    </>
   );
 };
 

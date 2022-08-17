@@ -5,18 +5,16 @@ import {
 } from "@yext/search-ui-react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
-import { answersSandboxEndpoints, config } from "../config";
+import { config } from "../config";
 import logo from "../icons/logo.png";
-import { provideHeadless, useSearchActions } from "@yext/search-headless-react";
-import classNames from "classnames";
-import { Root } from "../Providers/ProductsSchema";
-import { ProductCard } from "../components/ProductCard";
 import CartIcon from "./CartComponents/CartIcon";
+import { provideHeadless, SandboxEndpoints } from "@yext/search-headless-react";
+
 export function Navbar() {
   const visualAutocompleteConfig: VisualAutocompleteConfig = {
     entityPreviewSearcher: provideHeadless({
       ...config,
-      endpoints: answersSandboxEndpoints,
+      endpoints: SandboxEndpoints,
       headlessId: "visual-autocomplete",
     }),
     includedVerticals: ["products"],
@@ -26,14 +24,10 @@ export function Navbar() {
       }
 
       const { results } = verticalKeyToResults.products;
-      const containerClassName = classNames({
-        "opacity-50": isLoading,
-        "flex ml-4 mt-1": true,
-      });
 
       return (
         <div className="SB_parent">
-          {results.map((r: Root, index: number) => (
+          {results.map((r: any, index: number) => (
             <DropdownItem
               key={index + "-" + r.name}
               value={r.name ? r.name : ""}
@@ -44,6 +38,7 @@ export function Navbar() {
                     <img
                       src={r.rawData?.primaryPhoto?.image?.url}
                       className="SB_iconDetails"
+                      alt={r.rawData.name}
                     />
                   </div>
                   <div style={{ marginLeft: "5em" }}>
